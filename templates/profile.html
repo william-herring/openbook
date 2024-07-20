@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your profile</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='dist/css/output.css')}}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="fixed top-0 flex items-center p-6">
+        <a class="font-semibold text-xl" href="#">Openbook</a>
+    </div>
+    <div class="flex flex-col h-screen justify-center items-center">
+        <div class="flex flex-col">
+            <h1 class="font-semibold text-2xl mb-12">Your profile</h1>
+            <div class="mb-12 font-medium w-96 space-y-2">
+                <div class="flex flex-row items-center">
+                    <h3>Avatar</h3>
+                    <img class="w-10 ml-auto" src="https://hostedboringavatars.vercel.app/api/beam?name={{user_name}}">
+                </div>
+                <div class="flex flex-row items-center">
+                    <h3>Display name</h3>
+                    <p class="font-normal ml-auto">{{user_name}}</p>
+                </div>
+                <div class="flex flex-row items-center">
+                    <h3>School</h3>
+                    {{
+                    <p class="font-normal ml-auto">{{school}}</p>
+                </div>
+                <div class="flex flex-row items-center">
+                    <h3>Year level</h3>
+                    <p class="font-normal ml-auto">{{year_level}}</p>
+                </div>
+            </div>
+            <div class="flex justify-start space-x-3 mb-5">
+                <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90">Save changes</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
