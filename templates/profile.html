@@ -26,8 +26,11 @@
                 </div>
                 <div class="flex flex-row items-center">
                     <h3>School</h3>
-                    {{
-                    <p class="font-normal ml-auto">{{school}}</p>
+                    {% if school|length > 1 %}
+                        <p class="font-normal ml-auto">{{school}}</p>
+                    {% else %}
+                        <p class="font-normal ml-auto text-gray-500">N/A</p>
+                    {% endif %}
                 </div>
                 <div class="flex flex-row items-center">
                     <h3>Year level</h3>
