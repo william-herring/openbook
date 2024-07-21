@@ -23,4 +23,8 @@ def log_in():
 
 @app.route("/sign-up")
 def sign_up():
-    return render_template('sign-up')
+    return render_template('sign-up.html')
+
+@app.route("/profile")
+def profile():
+    return render_template('profile.html', user_name='William Herring', year_level=11)
