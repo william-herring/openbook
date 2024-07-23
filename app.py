@@ -1,9 +1,9 @@
 import os
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
@@ -52,6 +52,8 @@ def register():
         db.session.add(user)
         db.session.commit()
 
+        login_user(user)
+
         return redirect('/profile?editing=1')
 
     return render_template('sign-up.html')
@@ -62,9 +64,11 @@ def logout():
     logout_user()
     return redirect('/log-in')
 
-@app.route("/profile")
+@app.route('/profile')
+@login_required
 def profile():
-    return render_template('profile.html', user_name='William Herring', year_level=11)
+    editing = request.args.get('editing') == '1'
+    return render_template('profile.html', editing=editing, user_name=current_user.display_name, avatar=current_user.avatar, year_level=current_user.year_level)
 
 @app.route('/library')
 def library():
