@@ -9,8 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="fixed top-0 flex items-center p-6">
-        <a class="font-semibold text-xl" href="#">Openbook</a>
+    <div class="fixed w-screen top-0 flex items-center p-6">
+        <a class="font-semibold text-xl" href="/">Openbook</a>
+        <button class="ml-auto">
+            <svg width="24px" height="24px" stroke-width="3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </button>
     </div>
     <div class="flex flex-col h-screen justify-center items-center">
         <div class="flex flex-col">
@@ -38,7 +41,8 @@
                 </div>
             </div>
             <div class="flex justify-start space-x-3 mb-5">
-                <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90">Save changes</button>
+                <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90">Edit</button>
+                <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold opacity-40">Save changes</button>
             </div>
         </div>
     </div>
