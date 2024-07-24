@@ -29,31 +29,51 @@
                 </div>
                 <div class="flex flex-row items-center">
                     <h3>Display name</h3>
-                    <p class="font-normal ml-auto">{{user_name}}</p>
+                    {% if editing %}
+                        <input type="text" class="font-normal ml-auto text-right" value="{{user_name}}">
+                    {% else %}
+                        <p class="font-normal ml-auto">{{user_name}}</p>
+                    {% endif %}
                 </div>
                 <div class="flex flex-row items-center">
                     <h3>School</h3>
                     {% if school|length > 1 %}
-                        <p class="font-normal ml-auto">{{school}}</p>
+                        {% if editing %}
+                            <input type="text" class="font-normal ml-auto text-right" value="{{school}}">
+                        {% else %}
+                            <p class="font-normal ml-auto">{{school}}</p>
+                        {% endif %}
                     {% else %}
-                        <p class="font-normal ml-auto text-gray-500">N/A</p>
+                        {% if editing %}
+                            <input type="text" class="font-normal ml-auto text-right" placeholder="N/A">
+                        {% else %}
+                            <p class="font-normal ml-auto text-gray-500">N/A</p>
+                        {% endif %}
                     {% endif %}
                 </div>
                 <div class="flex flex-row items-center">
                     <h3>Year level</h3>
                     {% if year_level %}
-                        <p class="font-normal ml-auto">{{year_level}}</p>
+                        {% if editing %}
+                            <input type="text" class="font-normal ml-auto text-right" value="{{year_level}}">
+                        {% else %}
+                            <p class="font-normal ml-auto">{{year_level}}</p>
+                        {% endif %}
                     {% else %}
-                        <p class="font-normal ml-auto text-gray-500">N/A</p>
+                        {% if editing %}
+                            <input type="text" class="font-normal ml-auto text-right" placeholder="N/A">
+                        {% else %}
+                            <p class="font-normal ml-auto text-gray-500">N/A</p>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
             <div class="flex justify-start space-x-3 mb-5">
                 {% if editing %}
                     <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold opacity-40" disabled>Edit</button>
-                    <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90">Save changes</button>
+                    <a class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90" href="?editing=0">Save changes</a>
                 {% else %}
-                    <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90">Edit</button>
+                    <a class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90" href="?editing=1">Edit</a>
                     <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold opacity-40" disabled>Save changes</button>
                 {% endif %}
             </div>

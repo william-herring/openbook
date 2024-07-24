@@ -7,7 +7,12 @@ from wonderwords import RandomWord
 
 r = RandomWord()
 
-# TODO: Many-to-many for users-books and books-authors
+# TODO: Many-to-many for users-books
+textbooks_authors = db.Table(
+    "textbooks_authors",
+    db.Column("textbook_id", db.Integer, db.ForeignKey("textbook.id")),
+    db.Column("author_id", db.Integer, db.ForeignKey("author.id"))
+)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,6 +41,7 @@ class User(UserMixin, db.Model):
 
 class Textbook(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    approved = db.Column(db.Boolean, default=False)
     last_updated = db.Column(db.DateTime, onupdate=datetime.utcnow)
     book_code = db.Column(db.String(5), nullable=False)
     title = db.Column(db.String(100), nullable=False)
@@ -43,6 +49,7 @@ class Textbook(db.Model):
     repository = db.Column(db.String(500), nullable=False)
     pdf = db.Column(db.String(500), nullable=False)
     html = db.Column(db.String(500), nullable=False)
+    authors = db.relationship("Author", secondary=textbooks_authors, back_populates="textbooks")
 
     def __repr__(self):
         return f"<Textbook {self.book_code}>"
@@ -50,3 +57,4 @@ class Textbook(db.Model):
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
+    textbooks = db.relationship("Textbook", secondary=textbooks_authors, back_populates="authors")
