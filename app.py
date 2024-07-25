@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, session
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user, user_logged_in
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
@@ -23,6 +23,8 @@ with app.app_context():
 
 @app.route("/")
 def index():
+    if session:
+        return redirect('/library')
     return render_template('index.html')
 
 @login_manager.user_loader
@@ -70,6 +72,22 @@ def profile():
     editing = request.args.get('editing') == '1'
     return render_template('profile.html', editing=editing, user_name=current_user.display_name, avatar=current_user.avatar, year_level=current_user.year_level)
 
+@app.route('/update-profile', methods=['POST'])
+@login_required
+def update_profile():
+    user = current_user
+    avatar = request.form.get('avatar')
+    display_name = request.form.get('display-name')
+    school = request.form.get('school')
+    year_level = request.form.get('year-level')
+
+
 @app.route('/library')
 def library():
-    return render_template('index.html')
+    return render_template('library.html')
+
+@app.route('/upload-centre')
+@login_required
+def upload_centre():
+    admin = current_user.role == 'admin'
+    return render_template('upload-centre.html', admin=admin)
