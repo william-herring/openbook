@@ -1,9 +1,10 @@
 import os
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, Response
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
+from werkzeug.security import check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, user_logged_in
+import uploads
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
@@ -11,7 +12,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-bcrypt = Bcrypt(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -38,7 +38,7 @@ def log_in():
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
 
-        if user and bcrypt.check_password_hash(user.password, password):
+        if user and check_password_hash(user.password, password):
             login_user(user)
             return redirect('/library')
 
@@ -75,19 +75,41 @@ def profile():
 @app.route('/update-profile', methods=['POST'])
 @login_required
 def update_profile():
+    data = request.json
     user = current_user
-    avatar = request.form.get('avatar')
-    display_name = request.form.get('display-name')
-    school = request.form.get('school')
-    year_level = request.form.get('year-level')
+    avatar = data['avatar']
+    display_name = data['display-name']
+    # school = data['school']
+    year_level = data['year-level']
+
+    user.avatar, user.display_name, user.year_level = avatar, display_name, year_level
+    db.session.add(user)
+    db.session.commit()
+
+    return Response('Updated user', 200)
 
 
 @app.route('/library')
 def library():
-    return render_template('library.html')
+    return render_template('library.html', avatar=current_user.avatar)
 
 @app.route('/upload-centre')
 @login_required
 def upload_centre():
     admin = current_user.role == 'admin'
     return render_template('upload-centre.html', admin=admin)
+
+@app.route('/submit-textbook')
+@login_required
+def submit_textbook():
+    repository = request.form.get('repository')
+    metadata = uploads.get_textbook_data(repository)['metadata']
+
+    submission = TextbookSubmission(
+        title=metadata['title'],
+        repository=repository
+    )
+    db.session.add(submission)
+    db.session.commit()
+
+    return Response('Submission added', 201)

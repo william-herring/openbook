@@ -1,6 +1,6 @@
 import random
 from datetime import datetime
-from app import bcrypt
+from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
 from app import db
 from wonderwords import RandomWord
@@ -32,8 +32,7 @@ class User(UserMixin, db.Model):
 
         self.avatar = f"https://hostedboringavatars.vercel.app/api/beam?name={self.display_name}"
         self.email = email
-        pwhash = bcrypt.generate_password_hash(password)
-        self.password = pwhash.decode('utf8')
+        self.password = generate_password_hash(password)
         self.created_on = datetime.now()
 
     def __repr__(self):
@@ -58,3 +57,9 @@ class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
     textbooks = db.relationship("Textbook", secondary=textbooks_authors, back_populates="authors")
+
+
+class TextbookSubmission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
+    repository = db.Column(db.String(500), nullable=False)
