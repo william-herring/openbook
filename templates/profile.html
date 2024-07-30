@@ -30,7 +30,7 @@
                 <div class="flex flex-row items-center">
                     <h3>Display name</h3>
                     {% if editing %}
-                        <input type="text" class="font-normal ml-auto text-right" value="{{user_name}}">
+                        <input type="text" class="font-normal ml-auto text-right" id="display-name" value="{{user_name}}">
                     {% else %}
                         <p class="font-normal ml-auto">{{user_name}}</p>
                     {% endif %}
@@ -55,7 +55,7 @@
                     <h3>Year level</h3>
                     {% if year_level %}
                         {% if editing %}
-                            <input type="text" class="font-normal ml-auto text-right" value="{{year_level}}">
+                            <input type="text" class="font-normal ml-auto text-right" id="year-level" value="{{year_level}}">
                         {% else %}
                             <p class="font-normal ml-auto">{{year_level}}</p>
                         {% endif %}
@@ -71,7 +71,7 @@
             <div class="flex justify-start space-x-3 mb-5">
                 {% if editing %}
                     <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold opacity-40" disabled>Edit</button>
-                    <a class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90" href="?editing=0">Save changes</a>
+                    <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90" onclick="saveChanges();">Save changes</button>
                 {% else %}
                     <a class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold hover:opacity-90" href="?editing=1">Edit</a>
                     <button class="rounded-full px-8 py-2 bg-black text-white text-sm font-semibold opacity-40" disabled>Save changes</button>
