@@ -1,10 +1,13 @@
 import os
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, session, Response
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, user_logged_in
 import uploads
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')

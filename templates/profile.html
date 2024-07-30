@@ -12,9 +12,9 @@
 <body>
     <div class="fixed w-screen top-0 flex items-center p-6">
         <a class="font-semibold text-xl" href="/">Openbook</a>
-        <button class="ml-auto">
+        <a class="ml-auto" href="javascript:history.back();">
             <svg width="24px" height="24px" stroke-width="3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        </button>
+        </a>
     </div>
     <div class="flex flex-col h-screen justify-center items-center">
         <div class="flex flex-col">
@@ -61,7 +61,7 @@
                         {% endif %}
                     {% else %}
                         {% if editing %}
-                            <input type="text" class="font-normal ml-auto text-right" placeholder="N/A">
+                            <input type="text" class="font-normal ml-auto text-right" id="year-level" placeholder="N/A">
                         {% else %}
                             <p class="font-normal ml-auto text-gray-500">N/A</p>
                         {% endif %}

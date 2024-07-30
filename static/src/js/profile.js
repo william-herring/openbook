@@ -5,9 +5,6 @@ function regenerateAvatar() {
 }
 
 function saveChanges() {
-    console.log(document.getElementById('display-name').value);
-    console.log(document.getElementById('year-level') == null);
-
     fetch('/update-profile', {
         method: 'POST',
         headers: {
@@ -25,5 +22,4 @@ function saveChanges() {
             params.delete('editing');
         }
     });
-    console.log('hi');
 }
