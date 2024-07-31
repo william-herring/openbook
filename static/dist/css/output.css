@@ -611,6 +611,10 @@ video {
   height: 100vh;
 }
 
+.h-0 {
+  height: 0px;
+}
+
 .w-10 {
   width: 2.5rem;
 }
@@ -625,6 +629,10 @@ video {
 
 .w-screen {
   width: 100vw;
+}
+
+.w-0 {
+  width: 0px;
 }
 
 .flex-row {

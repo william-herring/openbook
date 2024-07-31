@@ -5,21 +5,31 @@ function regenerateAvatar() {
 }
 
 function saveChanges() {
+    var data = {
+        "avatar": document.getElementById('avatar-img').src,
+        "display-name": document.getElementById('display-name').value,
+        "year-level": document.getElementById('year-level').value,
+    };
+
+    Object.keys(data).forEach(key => {
+        if (data[key] == null || data[key] == "") {
+            delete data[key];
+        }
+    });
+
+    console.log(data)
+
     fetch('/update-profile', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            "avatar": document.getElementById('avatar-img').src,
-            "display-name": document.getElementById('display-name').value,
-            "year-level": document.getElementById('year-level').value,
-        })
+        body: JSON.stringify(data)
     }).then(response => {
         if (response.ok) {
-            const url = new URL(window.location.href);
-            const params = new URLSearchParams(url.search);
-            params.delete('editing');
+            const params = new URLSearchParams(window.location.search);
+            params.set('editing', '0');
+            history.replaceState(null, null, "?" + params.toString());
         }
     });
 }
