@@ -94,7 +94,8 @@ def update_profile():
 
 @app.route('/library')
 def library():
-    return render_template('library.html', avatar=current_user.avatar)
+    all_textbooks = Textbook.query.all()
+    return render_template('library.html', avatar=current_user.avatar, all_textbooks=all_textbooks)
 
 @app.route('/upload-centre')
 @login_required

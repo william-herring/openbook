@@ -33,8 +33,23 @@
         <h1 class="font-semibold text-center w-full">Library</h1>
     </div>
     <div class="p-6 space-y-10" style="margin-top: 80px;">
-        <h1 class="font-semibold">Recent</h1>
-        <h1 class="font-semibold">All textbooks</h1>
+        <div>
+            <h1 class="font-semibold">Recent</h1>
+        </div>
+        <div>
+            <h1 class="font-semibold mb-3">All textbooks</h1>
+            <div class="flex flex-row space-x-4">
+                {% for textbook in all_textbooks %}
+                    <a class="flex flex-col items-center" href="#">
+                        <div class="w-36 h-48 mb-4 p-5" style="background-color: {{textbook.cover_colour}};">
+                            <p class="font-bold text-4xl opacity-50">{{textbook.book_code}}</p><br><br><br><br>
+                            <p class="font-semibold text-xs opacity-30">Openbook</p>
+                        </div>
+                        <p class="text-xs">{{textbook.title}}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 </body>
 </html>
