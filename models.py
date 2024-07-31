@@ -40,7 +40,6 @@ class User(UserMixin, db.Model):
 
 class Textbook(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    approved = db.Column(db.Boolean, default=False)
     last_updated = db.Column(db.DateTime, onupdate=datetime.utcnow)
     book_code = db.Column(db.String(5), nullable=False)
     title = db.Column(db.String(100), nullable=False)

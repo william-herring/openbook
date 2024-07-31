@@ -3,14 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Textbook Uploads</title>
+    <script src="{{url_for('static',filename='src/js/submissions.js')}}"></script>
 </head>
 <body>
     <h1>Uploads Centre</h1>
     This page is for new textbook submissions. To contribute to an existing textbook, click 'Contribute' from the navigation menu whilst in the textbook view.
     {% if admin %}
-    <h2>Pending approval</h2>
+    <h2>Pending approval | Admin</h2>
+        {% for s in pending %}
+            <div id="s-{{s.id}}">
+                <p>> {{s.title}} | <a href="{{s.repository}}" target="_blank">Repository</a></p>
+                <button>Approve</button><button onclick="deleteSubmission({{s.id}});">Delete</button><br>
+            </div>
+        {% endfor %}
     {% endif %}
     <h2>Submit new textbook for approval</h2>
+    <form action="/submit-textbook" method="post">
+        <label for="repository">GitHub Repository URL:</label>
+        <input id="repository" name="repository" type="text" placeholder="e.g. https://github.com/myusername/mytextbook"><br>
+        <input type="submit">
+    </form>
     <h2>Already approved</h2>
 </body>
 </html>

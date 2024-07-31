@@ -99,14 +99,19 @@ def library():
 @app.route('/upload-centre')
 @login_required
 def upload_centre():
-    admin = current_user.role == 'admin'
-    return render_template('upload-centre.html', admin=admin)
+    if current_user.role == 'admin':
+        pending_submissions = TextbookSubmission.query.all()
+        return render_template('upload-centre.html', admin=True, pending=pending_submissions)
+    return render_template('upload-centre.html', admin=False)
 
-@app.route('/submit-textbook')
+@app.route('/submit-textbook', methods=['POST'])
 @login_required
 def submit_textbook():
     repository = request.form.get('repository')
+    print(repository)
     metadata = uploads.get_textbook_data(repository)['metadata']
+    print(metadata)
+    print(metadata['title'])
 
     submission = TextbookSubmission(
         title=metadata['title'],
@@ -115,4 +120,20 @@ def submit_textbook():
     db.session.add(submission)
     db.session.commit()
 
-    return Response('Submission added', 201)
+    return Response(f'Submission added: {submission.title}', 201)
+
+@app.route('/delete-submission', methods=['POST'])
+@login_required
+def delete_submission():
+    if current_user.role == 'admin':
+        submission_id = request.json['submission-id']
+        submission = TextbookSubmission.query.filter(TextbookSubmission.id == submission_id).first()
+        db.session.delete(submission)
+        db.session.commit()
+        return Response(f'Deleted submission with id {submission_id}', 200)
+    return Response('Unauthorized', 401)
+
+@app.route('/approve-submission', methods=['POST'])
+@login_required
+def approve_submission():
+    pass
