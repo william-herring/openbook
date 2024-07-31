@@ -10,7 +10,23 @@
     <script src="{{url_for('static',filename='src/js/drawer.js')}}"></script>
 </head>
 <body>
-    <div class="drawer-wrapper">
+    <div id="drawer" class="fixed top-0 w-screen h-screen bg-black bg-opacity-15" style="z-index: 50; display: none;" onclick="closeDrawer();">
+        <div class="flex flex-col p-12 text-sm bg-white h-screen" style="width: 400px;">
+            <div class="flex flex-row">
+                <h1 class="font-semibold text-2xl">Openbook</h1>
+                <a href="/profile" class="ml-auto"><img class="w-10" id="avatar-img" src="{{avatar}}"></a>
+            </div>
+            <div class="flex flex-row space-x-8 my-12">
+                <button class="font-medium bg-black py-2 px-5 text-white rounded-full">Pages</button>
+                <button class="font-medium py-2 px-5 rounded-full hover:bg-black hover:bg-opacity-10">Books</button>
+            </div>
+            <div class="flex flex-col space-y-2">
+                <a href="/recent-textbook" class="hover:font-semibold">Recent textbook</a>
+                <a href="/library" class="font-semibold">Library</a>
+                <a href="/upload-centre" class="hover:font-semibold">Uploads centre</a>
+            </div>
+            <a href="/log-out" class="mt-auto bottom-0 hover:font-semibold">Log out</a>
+        </div>
     </div>
     <div class="fixed w-screen top-0 flex items-center p-6 bg-white">
         <button onclick="openDrawer();"><svg width="24px" height="24px" stroke-width="3" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M3 5H21" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 12H21" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M3 19H21" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
