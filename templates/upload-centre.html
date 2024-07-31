@@ -13,7 +13,7 @@
         {% for s in pending %}
             <div id="s-{{s.id}}">
                 <p>> {{s.title}} | <a href="{{s.repository}}" target="_blank">Repository</a></p>
-                <button>Approve</button><button onclick="deleteSubmission({{s.id}});">Delete</button><br>
+                <button onclick="approveSubmission('{{s.repository}}', {{s.id}});">Approve</button><button onclick="deleteSubmission({{s.id}});">Delete</button><br>
             </div>
         {% endfor %}
     {% endif %}

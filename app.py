@@ -108,10 +108,7 @@ def upload_centre():
 @login_required
 def submit_textbook():
     repository = request.form.get('repository')
-    print(repository)
     metadata = uploads.get_textbook_data(repository)['metadata']
-    print(metadata)
-    print(metadata['title'])
 
     submission = TextbookSubmission(
         title=metadata['title'],
@@ -136,4 +133,31 @@ def delete_submission():
 @app.route('/approve-submission', methods=['POST'])
 @login_required
 def approve_submission():
-    pass
+    repository = request.json['repository']
+    submission_id = request.json['submission-id']
+    options = uploads.get_textbook_data(repository)
+    title = options['metadata']['title']
+    book_code = uploads.generate_book_code(title)
+
+    authors = []
+    for a in options['metadata']['authors']:
+        q = Author.query.filter_by(name=a).all()
+        if len(q) < 1:
+            author = Author(name=a)
+            db.session.add(author)
+            db.session.commit()
+        else:
+            author = q[0]
+        authors.append(author)
+
+    pages = 20  # TODO: Count pages. Probably update metadata in OTE
+    pdf = 'placeholder'  # TODO: Gen PDFs
+    html = uploads.get_textbook_html_url(repository)
+
+    textbook = Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors)
+    db.session.add(textbook)
+    submission = TextbookSubmission.query.filter_by(id=submission_id).first()
+    db.session.delete(submission)
+    db.session.commit()
+
+    return Response(f'Created textbook: {book_code}', 201)
