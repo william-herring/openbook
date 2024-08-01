@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, session, Response
+from flask import Flask, render_template, request, redirect, session, Response, make_response
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
@@ -95,12 +95,16 @@ def update_profile():
 @app.route('/library')
 def library():
     all_textbooks = Textbook.query.all()
-    return render_template('library.html', avatar=current_user.avatar, all_textbooks=all_textbooks)
+    recent_textbook = request.cookies.get('recent-textbook')
+    return render_template('library.html', avatar=current_user.avatar, all_textbooks=all_textbooks, recent_textbook=recent_textbook)
 
 @app.route('/textbook/<string:book_code>/<int:book_id>')
 def textbook_view(book_code, book_id):
     textbook = Textbook.query.filter_by(book_code=book_code, id=book_id).first()
-    return render_template('reader.html', avatar=current_user.avatar, title=textbook.title)
+    recent_textbook = f'{textbook.book_code}/{textbook.id}'
+    resp = make_response(render_template('reader.html', avatar=current_user.avatar, title=textbook.title, recent_textbook=recent_textbook))
+    resp.set_cookie('recent-textbook', recent_textbook)
+    return resp
 
 @app.route('/upload-centre')
 @login_required
