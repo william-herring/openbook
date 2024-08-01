@@ -578,6 +578,10 @@ video {
   top: 0px;
 }
 
+.right-0 {
+  right: 0px;
+}
+
 .my-12 {
   margin-top: 3rem;
   margin-bottom: 3rem;
@@ -621,6 +625,10 @@ video {
 
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+.mt-24 {
+  margin-top: 6rem;
 }
 
 .flex {

@@ -97,6 +97,11 @@ def library():
     all_textbooks = Textbook.query.all()
     return render_template('library.html', avatar=current_user.avatar, all_textbooks=all_textbooks)
 
+@app.route('/textbook/<string:book_code>/<int:book_id>')
+def textbook_view(book_code, book_id):
+    textbook = Textbook.query.filter_by(book_code=book_code, id=book_id).first()
+    return render_template('reader.html', avatar=current_user.avatar, title=textbook.title)
+
 @app.route('/upload-centre')
 @login_required
 def upload_centre():
