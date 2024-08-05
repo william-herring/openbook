@@ -1,3 +1,4 @@
+import json
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, redirect, session, Response, make_response
@@ -5,7 +6,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, user_logged_in
-import uploads
+import textbooks
 
 load_dotenv()
 
@@ -102,7 +103,8 @@ def library():
 def textbook_view(book_code, book_id):
     textbook = Textbook.query.filter_by(book_code=book_code, id=book_id).first()
     recent_textbook = f'{textbook.book_code}/{textbook.id}'
-    resp = make_response(render_template('reader.html', avatar=current_user.avatar, title=textbook.title, recent_textbook=recent_textbook))
+    build_data = textbooks.get_textbook_build_data(textbook.repository)
+    resp = make_response(render_template('reader.html', avatar=current_user.avatar, textbook=textbook, build_data=build_data, recent_textbook=recent_textbook))
     resp.set_cookie('recent-textbook', recent_textbook)
     return resp
 
@@ -118,7 +120,7 @@ def upload_centre():
 @login_required
 def submit_textbook():
     repository = request.form.get('repository')
-    metadata = uploads.get_textbook_data(repository)['metadata']
+    metadata = textbooks.get_textbook_options(repository)['metadata']
 
     submission = TextbookSubmission(
         title=metadata['title'],
@@ -145,9 +147,10 @@ def delete_submission():
 def approve_submission():
     repository = request.json['repository']
     submission_id = request.json['submission-id']
-    options = uploads.get_textbook_data(repository)
+    options = textbooks.get_textbook_options(repository)
+    cover_colour = options['book']['cover']['colour']
     title = options['metadata']['title']
-    book_code = uploads.generate_book_code(title)
+    book_code = textbooks.generate_book_code(title)
 
     authors = []
     for a in options['metadata']['authors']:
@@ -162,9 +165,9 @@ def approve_submission():
 
     pages = 20  # TODO: Count pages. Probably update metadata in OTE
     pdf = 'placeholder'  # TODO: Gen PDFs
-    html = uploads.get_textbook_html_url(repository)
+    html = textbooks.get_textbook_html_url(repository)
 
-    textbook = Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors)
+    textbook = Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors) if cover_colour is 'default' else Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors, cover_colour=cover_colour)
     db.session.add(textbook)
     submission = TextbookSubmission.query.filter_by(id=submission_id).first()
     db.session.delete(submission)
