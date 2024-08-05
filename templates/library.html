@@ -41,7 +41,7 @@
             <div class="flex space-x-4">
                 {% for textbook in all_textbooks %}
                     <a class="flex flex-col items-center" href="{{url_for('textbook_view', book_code=textbook.book_code, book_id=textbook.id)}}" title="{{textbook.title}}">
-                        <div class="w-36 h-48 mb-4 p-5" style="background-color: {{textbook.cover_colour}};">
+                        <div class="w-36 h-48 mb-4 p-5" style="background-color: #{{textbook.cover_colour}};">
                             <p class="font-bold text-4xl opacity-50">{{textbook.book_code}}</p><br><br><br><br>
                             <p class="font-semibold text-xs opacity-30">Openbook</p>
                         </div>
