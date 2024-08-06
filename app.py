@@ -167,7 +167,7 @@ def approve_submission():
     pdf = 'placeholder'  # TODO: Gen PDFs
     html = textbooks.get_textbook_html_url(repository)
 
-    textbook = Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors) if cover_colour is 'default' else Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors, cover_colour=cover_colour)
+    textbook = Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors) if cover_colour == 'default' else Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors, cover_colour=cover_colour)
     db.session.add(textbook)
     submission = TextbookSubmission.query.filter_by(id=submission_id).first()
     db.session.delete(submission)
