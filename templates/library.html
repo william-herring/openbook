@@ -13,7 +13,7 @@
     <div id="drawer" class="fixed top-0 w-screen h-screen bg-black bg-opacity-15" style="z-index: 50; display: none;" onclick="closeDrawer();">
         <div class="flex flex-col p-12 text-sm bg-white h-screen" style="width: 400px;">
             <div class="flex flex-row">
-                <h1 class="font-semibold text-2xl">Openbook</h1>
+                <a class="font-semibold text-2xl" href="/">Openbook</a>
                 <a href="/profile" class="ml-auto"><img class="w-10" id="avatar-img" src="{{avatar}}"></a>
             </div>
             <div class="flex flex-row space-x-8 my-12">
@@ -21,7 +21,7 @@
                 <button class="font-medium py-2 px-5 rounded-full hover:bg-black hover:bg-opacity-10">Books</button>
             </div>
             <div class="flex flex-col space-y-2">
-                <a href="/textbook/{{recent_textbook}}" class="hover:font-semibold">Recent textbook</a>
+                <a href="/textbook/{{recent_textbook.book_code}}/{{recent_textbook.id}}" class="hover:font-semibold">Recent textbook</a>
                 <a href="/library" class="font-semibold">Library</a>
                 <a href="/upload-centre" class="hover:font-semibold">Uploads centre</a>
             </div>
@@ -34,7 +34,18 @@
     </div>
     <div class="p-6 space-y-10" style="margin-top: 80px;">
         <div>
-            <h1 class="font-semibold">Recent</h1>
+            <h1 class="font-semibold mb-3">Recent</h1>
+            <div class="flex space-x-4">
+                {% if recent_textbook is not none %}
+                    <a class="flex flex-col items-center" href="{{url_for('textbook_view', book_code=recent_textbook.book_code, book_id=recent_textbook.id)}}" title="{{recent_textbook.title}}">
+                        <div class="w-36 h-48 mb-4 p-5" style="background-color: #{{recent_textbook.cover_colour}};">
+                            <p class="font-bold text-4xl opacity-50">{{recent_textbook.book_code}}</p><br><br><br><br>
+                            <p class="font-semibold text-xs opacity-30">Openbook</p>
+                        </div>
+                        <p class="text-xs">{{recent_textbook.title}}</p>
+                    </a>
+                {% endif %}
+            </div>
         </div>
         <div>
             <h1 class="font-semibold mb-3">All textbooks</h1>

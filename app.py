@@ -96,7 +96,7 @@ def update_profile():
 @app.route('/library')
 def library():
     all_textbooks = Textbook.query.all()
-    recent_textbook = request.cookies.get('recent-textbook')
+    recent_textbook = Textbook.query.filter_by(book_code=request.cookies.get('recent-textbook').split('/')[0]).first()
     return render_template('library.html', avatar=current_user.avatar, all_textbooks=all_textbooks, recent_textbook=recent_textbook)
 
 @app.route('/textbook/<string:book_code>/<int:book_id>')
@@ -105,7 +105,7 @@ def textbook_view(book_code, book_id):
     recent_textbook = f'{textbook.book_code}/{textbook.id}'
     build_data = textbooks.get_textbook_build_data(textbook.repository)
     page_number = int(request.args.get('page')) if request.args.get('page') is not None else 0
-    resp = make_response(render_template('reader.html', avatar=current_user.avatar, textbook=textbook, build_data=build_data, recent_textbook=recent_textbook, page=page_number))
+    resp = make_response(render_template('reader.html', avatar=current_user.avatar, textbook=textbook, build_data=build_data, page=page_number))
     resp.set_cookie('recent-textbook', recent_textbook)
     return resp
 
