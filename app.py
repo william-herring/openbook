@@ -1,19 +1,22 @@
 import json
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, session, Response, make_response
+from flask import Flask, render_template, request, redirect, session, Response, make_response, send_from_directory
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user, user_logged_in
 import textbooks
+import exports
 
 load_dotenv()
+UPLOAD_FOLDER = './uploads'
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager()
@@ -152,6 +155,7 @@ def approve_submission():
     cover_colour = options['book']['cover']['colour']
     title = options['metadata']['title']
     book_code = textbooks.generate_book_code(title)
+    pdf = exports.export_pdf(repository, book_code)
 
     authors = []
     for a in options['metadata']['authors']:
@@ -164,14 +168,16 @@ def approve_submission():
             author = q[0]
         authors.append(author)
 
-    pages = 20  # TODO: Count pages. Probably update metadata in OTE
-    pdf = 'placeholder'  # TODO: Gen PDFs
     html = textbooks.get_textbook_html_url(repository)
 
-    textbook = Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors) if cover_colour == 'default' else Textbook(title=title, repository=repository, book_code=book_code, pages=pages, pdf=pdf, html=html, authors=authors, cover_colour=cover_colour)
+    textbook = Textbook(title=title, repository=repository, book_code=book_code, pdf=pdf, html=html, authors=authors) if cover_colour == 'default' else Textbook(title=title, repository=repository, book_code=book_code, pdf=pdf, html=html, authors=authors, cover_colour=cover_colour)
     db.session.add(textbook)
     submission = TextbookSubmission.query.filter_by(id=submission_id).first()
     db.session.delete(submission)
     db.session.commit()
 
     return Response(f'Created textbook: {book_code}', 201)
+
+@app.route('/uploads/<name>')
+def download_file(name):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], name)

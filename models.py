@@ -44,7 +44,6 @@ class Textbook(db.Model):
     book_code = db.Column(db.String(5), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     cover_colour = db.Column(db.String(7), default="db1a57")
-    pages = db.Column(db.Integer, nullable=False)
     repository = db.Column(db.String(500), nullable=False)
     pdf = db.Column(db.String(500), nullable=False)
     html = db.Column(db.String(500), nullable=False)
