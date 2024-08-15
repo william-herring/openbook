@@ -17,8 +17,6 @@ function saveChanges() {
         }
     });
 
-    console.log(data)
-
     fetch('/update-profile', {
         method: 'POST',
         headers: {
@@ -27,9 +25,7 @@ function saveChanges() {
         body: JSON.stringify(data)
     }).then(response => {
         if (response.ok) {
-            const params = new URLSearchParams(window.location.search);
-            params.set('editing', '0');
-            history.replaceState(null, null, "?" + params.toString());
+            location.href = location.origin + location.pathname + '?editing=0';
         }
     });
 }

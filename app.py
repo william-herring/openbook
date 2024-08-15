@@ -108,7 +108,8 @@ def textbook_view(book_code, book_id):
     recent_textbook = f'{textbook.book_code}/{textbook.id}'
     build_data = textbooks.get_textbook_build_data(textbook.repository)
     page_number = int(request.args.get('page')) if request.args.get('page') is not None else 0
-    resp = make_response(render_template('reader.html', avatar=current_user.avatar, textbook=textbook, build_data=build_data, page=page_number))
+    show_questions = request.args.get('mode') == 'questions'
+    resp = make_response(render_template('reader.html', avatar=current_user.avatar, textbook=textbook, build_data=build_data, page=page_number, show_questions=show_questions))
     resp.set_cookie('recent-textbook', recent_textbook)
     return resp
 
