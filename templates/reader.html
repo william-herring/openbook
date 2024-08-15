@@ -23,7 +23,7 @@
             </div>
             <div class="flex flex-col space-y-2">
                 <a href="/textbook/{{textbook.book_code}}/{{textbook.id}}" class="hover:font-semibold">Recent textbook</a>
-                <a href="/library" class="font-semibold">Library</a>
+                <a href="/library" class="hover:font-semibold">Library</a>
                 <a href="/upload-centre" class="hover:font-semibold">Uploads centre</a>
             </div>
             <a href="/log-out" class="mt-auto bottom-0 hover:font-semibold">Log out</a>
@@ -47,10 +47,10 @@
     <div class="p-6 pt-20 flex">
         <div style="width:400px">
             <div class="space-x-8 mb-12">
-                <button class="font-medium bg-black py-2 px-5 text-white rounded-full" id="chapters-toggle" onclick="showChaptersList();">Chapters</button>
-                <button class="font-medium py-2 px-5 rounded-full hover:bg-black hover:bg-opacity-10" id="questions-toggle" onclick="showQuestionsList();">Questions</button>
+                <button class="{{ 'font-medium py-2 px-5 rounded-full hover:bg-black hover:bg-opacity-10' if show_questions else 'font-medium bg-black py-2 px-5 text-white rounded-full' }}" id="chapters-toggle" onclick="showChaptersList();">Chapters</button>
+                <button class="{{ 'font-medium bg-black py-2 px-5 text-white rounded-full' if show_questions else 'font-medium py-2 px-5 rounded-full hover:bg-black hover:bg-opacity-10' }}" id="questions-toggle" onclick="showQuestionsList();">Questions</button>
             </div>
-            <div class="flex flex-col space-y-4" id="chapters-list">
+            <div class="{{ 'hidden' if show_questions else 'flex flex-col space-y-4' }}" id="chapters-list">
                 {% for chapter in build_data['chapters'] %}
                     {% if chapter[0].startswith('##') %}
                         <a href="?page={{chapter[2] + 1}}" class="flex w-full"><p>{{chapter[0]|replace('#', '')}}</p><p class="ml-auto">{{chapter[1]}}</p></a>
@@ -59,7 +59,7 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            <div class="hidden" id="questions-list">
+            <div class="{{ 'flex flex-col space-y-4' if show_questions else 'hidden' }}" id="questions-list">
                 {% for question, answers in build_data['questions'].items() %}
                     <h3 class="font-semibold">{{question|safe}}</h3>
                     <form onsubmit="
